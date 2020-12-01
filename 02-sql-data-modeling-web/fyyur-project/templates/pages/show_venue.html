@@ -76,7 +76,10 @@
 </section>
 
 <div class="col-sm-12">
-	<button data-id="{{venue.id}}" id="delete-venue" class="btn btn-danger pull-right">Delete Venue</button>
+	<div class="btn-group pull-right">
+		<a href="{{url_for('edit_venue', venue_id=venue.id)}}" class="btn btn-warning">Edit Venue</a>
+		<button data-id="{{venue.id}}" id="delete-venue" class="btn btn-danger">Delete Venue</button>
+	</div>
 	<script>
     const deleteButton = document.getElementById('delete-venue');
     deleteButton.onclick = function(e) {
