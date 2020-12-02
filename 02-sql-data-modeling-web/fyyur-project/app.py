@@ -44,7 +44,7 @@ def index():
 @app.route('/venues')
 def venues():
   # first grouping by city and state of all venues avaliables
-  groups_city_and_state = db.session.query(Venue.city, Venue.state).group_by(Venue.city, Venue.state).order_by(Venue.state)
+  groups_city_and_state = db.session.query(Venue.city, Venue.state).group_by(Venue.city, Venue.state).order_by(Venue.state).all()
 
   areas = []
 
@@ -99,27 +99,19 @@ def show_venue(venue_id):
   venue.genres = venue.genres.split(",")
 
   # source: https://stackoverflow.com/questions/17868743/doing-datetime-comparisons-in-filter-sqlalchemy
-  upcoming_shows_all = venue.artists.filter(Show.start_time > datetime.now()).all()
+  upcoming_shows = db.session.query(
+    Artist.id.label("artist_id"),
+    Artist.name.label("artist_name"),
+    Artist.image_link.label("artist_image_link"),
+    Show.start_time.label("start_time"),
+  ).filter_by(id=venue_id).join(Artist.venues).filter(Show.start_time > datetime.now()).all()
 
-  upcoming_shows = []
-  for show in upcoming_shows_all:
-      upcoming_shows.append({
-        "artist_id": show.artist.id,
-        "artist_name": show.artist.name,
-        "artist_image_link": show.artist.image_link,
-        "start_time": show.start_time
-      })
-
-  past_shows_all = venue.artists.filter(Show.start_time < datetime.now()).all()
-
-  past_shows = []
-  for show in past_shows_all:
-      past_shows.append({
-        "artist_id": show.artist.id,
-        "artist_name": show.artist.name,
-        "artist_image_link": show.artist.image_link,
-        "start_time": show.start_time
-      })
+  past_shows = db.session.query(
+    Artist.id.label("artist_id"),
+    Artist.name.label("artist_name"),
+    Artist.image_link.label("artist_image_link"),
+    Show.start_time.label("start_time"),
+  ).filter_by(id=venue_id).join(Artist.venues).filter(Show.start_time < datetime.now()).all()
 
   venue.upcoming_shows = upcoming_shows
   venue.past_shows = past_shows
@@ -298,27 +290,19 @@ def show_artist(artist_id):
   # converting back separating genres with the comma
   artist.genres = artist.genres.split(",")
 
-  upcoming_shows_all = artist.venues.filter(Show.start_time > datetime.now()).all()
+  upcoming_shows = db.session.query(
+    Artist.id.label("venue_id"),
+    Artist.name.label("venue_name"),
+    Artist.image_link.label("venue_image_link"),
+    Show.start_time.label("start_time"),
+  ).filter_by(id=artist_id).join(Venue.artists).filter(Show.start_time > datetime.now()).all()
 
-  upcoming_shows = []
-  for show in upcoming_shows_all:
-      upcoming_shows.append({
-        "venue_id": show.venue.id,
-        "venue_name": show.venue.name,
-        "venue_image_link": show.venue.image_link,
-        "start_time": show.start_time
-      })
-
-  past_shows_all = artist.venues.filter(Show.start_time < datetime.now()).all()
-
-  past_shows = []
-  for show in past_shows_all:
-      past_shows.append({
-        "venue_id": show.venue.id,
-        "venue_name": show.venue.name,
-        "venue_image_link": show.venue.image_link,
-        "start_time": show.start_time
-      })
+  past_shows = db.session.query(
+    Artist.id.label("venue_id"),
+    Artist.name.label("venue_name"),
+    Artist.image_link.label("venue_image_link"),
+    Show.start_time.label("start_time"),
+  ).filter_by(id=artist_id).join(Venue.artists).filter(Show.start_time < datetime.now()).all()
 
   artist.upcoming_shows = upcoming_shows
   artist.past_shows = past_shows
