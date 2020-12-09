@@ -197,7 +197,7 @@ def create_app(test_config=None):
           if previous_questions is not None:
               question = question.filter(Question.id.notin_(previous_questions))
 
-          if quiz_category is not None:
+          if quiz_category is not None and quiz_category['id'] != 0:
                 question = question.filter_by(category=quiz_category['id'])
 
           # Using build in random SQLAlchemy function
