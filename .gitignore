@@ -22,3 +22,5 @@ htmlcov/
 .coverage.*
 *,cover
 .log
+
+node_modules/
