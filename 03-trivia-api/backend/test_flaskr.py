@@ -130,17 +130,15 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.content_type, 'application/json')
         self.assertEqual(data['success'], True)
         self.assertTrue(data['total_questions'])
-        self.assertTrue(data['current_category'])
         self.assertEqual(len(data['questions']), 1)
 
-    def test_questions_search_with_results(self):
+    def test_questions_search_without_results(self):
         res = self.client().post('/questions', json={'searchTerm': 'Africdasdasa'})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.content_type, 'application/json')
         self.assertEqual(data['success'], True)
-        self.assertTrue(data['current_category'])
 
         self.assertEqual(data['total_questions'], 0)
         self.assertEqual(len(data['questions']), 0)
