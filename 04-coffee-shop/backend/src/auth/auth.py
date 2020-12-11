@@ -14,10 +14,12 @@ AuthError Exception
 A standardized way to communicate auth failure modes
 '''
 
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
+
 
 '''
     it should attempt to get the header from the request
@@ -26,6 +28,8 @@ class AuthError(Exception):
         it should raise an AuthError if the header is malformed
     return the token part of the header
 '''
+
+
 def get_token_auth_header():
     auth_header = request.headers.get('Authorization', None)
     if auth_header is None:
@@ -68,6 +72,8 @@ def get_token_auth_header():
     it should raise an AuthError if the requested permission string is not in the payload permissions array
     return true otherwise
 '''
+
+
 def check_permissions(permission, payload):
     print(permission)
     print(payload)
@@ -92,6 +98,8 @@ def check_permissions(permission, payload):
 
     !!NOTE urlopen has a common certificate error described here: https://stackoverflow.com/questions/50236117/scraping-ssl-certificate-verify-failed-error-for-http-en-wikipedia-org
 '''
+
+
 def verify_decode_jwt(token):
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
@@ -145,6 +153,7 @@ def verify_decode_jwt(token):
         'description': 'Unable to find the appropriate key'
     }, 400)
 
+
 '''
     @INPUTS
         permission: string permission (i.e. 'post:drink')
@@ -154,6 +163,8 @@ def verify_decode_jwt(token):
     it should use the check_permissions method validate claims and check the requested permission
     return the decorator which passes the decoded payload to the decorated method
 '''
+
+
 def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)

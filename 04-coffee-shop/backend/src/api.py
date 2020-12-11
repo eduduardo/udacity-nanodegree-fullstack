@@ -15,9 +15,9 @@ CORS(app)
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 '''
-#db_drop_and_create_all()
+# db_drop_and_create_all()
 
-## ROUTES
+# ROUTES
 '''
     GET /drinks
         it should be a public endpoint
@@ -25,6 +25,8 @@ CORS(app)
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+
+
 @app.route('/drinks')
 def get_drinks():
     drinks = Drink.query.all()
@@ -42,6 +44,8 @@ def get_drinks():
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+
+
 @app.route('/drinks-detail')
 @requires_auth('get:drinks-detail')
 def get_drinks_detail(payload):
@@ -61,6 +65,8 @@ def get_drinks_detail(payload):
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
         or appropriate status code indicating reason for failure
 '''
+
+
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
 def create_drink(payload):
@@ -90,6 +96,7 @@ def create_drink(payload):
         "drinks": drink.long()
     })
 
+
 '''
     PATCH /drinks/<id>
         where <id> is the existing model id
@@ -100,6 +107,8 @@ def create_drink(payload):
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 '''
+
+
 @app.route('/drinks/<int:drink_id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def update_drink(payload, drink_id):
@@ -133,6 +142,7 @@ def update_drink(payload, drink_id):
         "drinks": [drink.long()]
     })
 
+
 '''
     DELETE /drinks/<id>
         where <id> is the existing model id
@@ -142,6 +152,8 @@ def update_drink(payload, drink_id):
     returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
         or appropriate status code indicating reason for failure
 '''
+
+
 @app.route('/drinks/<int:drink_id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
 def delete_drink(payload, drink_id):
@@ -159,7 +171,9 @@ def delete_drink(payload, drink_id):
         "delete": drink_id
     })
 
-## Error Handling
+# Error Handling
+
+
 @app.errorhandler(401)
 def bad_request(error):
     return jsonify({
@@ -167,6 +181,7 @@ def bad_request(error):
         "message": "Unauthorized",
         "success": False
     }), 401
+
 
 @app.errorhandler(400)
 def bad_request(error):
@@ -176,6 +191,7 @@ def bad_request(error):
         "success": False
     }), 400
 
+
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({
@@ -183,6 +199,7 @@ def not_found(error):
         "message": "Resource could not be found",
         "success": False
     }), 404
+
 
 @app.errorhandler(405)
 def unprocessable(error):
@@ -192,6 +209,7 @@ def unprocessable(error):
         "success": False
     }), 405
 
+
 @app.errorhandler(422)
 def unprocessable(error):
     return jsonify({
@@ -200,6 +218,7 @@ def unprocessable(error):
         "success": False
     }), 422
 
+
 @app.errorhandler(500)
 def unprocessable(error):
     return jsonify({
@@ -207,6 +226,7 @@ def unprocessable(error):
         "message": "Internal server error",
         "success": False
     }), 500
+
 
 @app.errorhandler(AuthError)
 def auth_error(error):
