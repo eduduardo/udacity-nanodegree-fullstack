@@ -29,7 +29,7 @@ class AuthError(Exception):
     return the token part of the header
 '''
 
-
+# inspired by udacity example: https://github.com/udacity/FSND/blob/master/BasicFlaskAuth/app.py
 def get_token_auth_header():
     auth_header = request.headers.get('Authorization', None)
     if auth_header is None:
@@ -75,8 +75,6 @@ def get_token_auth_header():
 
 
 def check_permissions(permission, payload):
-    print(permission)
-    print(payload)
     if permission not in payload['permissions']:
         raise AuthError({
             "code": "has_no_permission",
@@ -99,7 +97,7 @@ def check_permissions(permission, payload):
     !!NOTE urlopen has a common certificate error described here: https://stackoverflow.com/questions/50236117/scraping-ssl-certificate-verify-failed-error-for-http-en-wikipedia-org
 '''
 
-
+# code of https://github.com/udacity/FSND/blob/master/BasicFlaskAuth/app.py
 def verify_decode_jwt(token):
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
