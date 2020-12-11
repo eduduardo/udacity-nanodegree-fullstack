@@ -37,7 +37,7 @@ From within the `./src` directory first ensure you are working using your create
 Each time you open a new terminal session, run:
 
 ```bash
-export FLASK_APP=api.py
+export FLASK_APP=src/api.py
 export AUTH0_DOMAIN=dev-ehvlmutg.us.auth0.com
 export AUTH0_AUDIENCE=coffee
 ```
