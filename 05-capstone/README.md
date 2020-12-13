@@ -76,7 +76,7 @@ First ensure you are working using your created virtual environment.
 To run the server, execute:
 
 ```bash
-export FLASK_APP=flaskr
+export FLASK_APP=app
 export FLASK_ENV=development
 export DATABASE_URL=postgresql://app_user@localhost:5432/casting_agency
 export AUTH0_DOMAIN=dev-ehvlmutg.us.auth0.com
