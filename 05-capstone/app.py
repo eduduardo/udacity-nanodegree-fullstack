@@ -1,6 +1,6 @@
-#----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
 # Controllers
-#----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
 from config import setup_db, db
 from models import Actor, Movie, Cast
 from flask_cors import CORS
@@ -25,11 +25,11 @@ def create_app(test_config=None):
                              'GET,POST,PUT,DELETE,OPTIONS')
         return response
 
-    #----------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     # Actors
-    #----------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     '''
-  Endpoint to handle GET requests for actors, including pagination (every 5 actors)
+  Endpoint to handle GET requests for actors, including pagination (every 5)
   This endpoint return a list of actors, their names, and movies participating
   '''
     @app.route('/actors')
@@ -79,7 +79,8 @@ def create_app(test_config=None):
         })
     '''
   Endpoint to handle update an actor
-  This endpoint return if success the actor name and gender, otherwise 400 or 422 errors
+  This endpoint return if success the actor name and gender,
+  otherwise 400 or 422 errors
   '''
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
     @requires_auth('update:actors')
@@ -136,12 +137,13 @@ def create_app(test_config=None):
             'success': True,
             'deleted': actor_id
         })
-    #----------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     # Movies
-    #----------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     '''
-  Endpoint to handle GET requests for movies, including pagination (every 5 movies)
-  This endpoint return a list of movies, their title, release_date, and actors cast
+  Endpoint to handle GET requests for movies, including pagination (every 5)
+  This endpoint return a list of movies, their title, release_date
+  and actors cast
   '''
     @app.route('/movies')
     @requires_auth('get:movies')
@@ -194,7 +196,8 @@ def create_app(test_config=None):
         })
     '''
   Endpoint to handle update a movie
-  This endpoint return if success the movie title, release_date and cast, otherwise 400 or 422 errors
+  This endpoint return if success the movie title, release_date and cast,
+  otherwise 400 or 422 errors
   '''
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     @requires_auth('update:movies')
@@ -256,10 +259,10 @@ def create_app(test_config=None):
             'deleted': movie_id
         })
 
-    #----------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     # Error handlers for expected errors
     # imported from previous udacity projects
-    #----------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
 
     @app.errorhandler(400)
     def bad_request(error):

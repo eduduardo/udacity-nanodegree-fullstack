@@ -34,10 +34,10 @@ class CastingTestCase(unittest.TestCase):
             "actors": [1]
         }
 
-        self.token_assistant = environ.get('ASSISTANT_TOKEN')
-        self.token_director = environ.get('DIRECTOR_TOKEN')
-        self.token_producer = environ.get('PRODUCER_TOKEN')
-         
+        self.token_assistant = environ.get('ASSISTANT_TOKEN', '')
+        self.token_director = environ.get('DIRECTOR_TOKEN', '')
+        self.token_producer = environ.get('PRODUCER_TOKEN', '')
+
         # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()
@@ -296,8 +296,7 @@ class CastingTestCase(unittest.TestCase):
             data['message'], "User has no delete:actors on this resource")
 
     def test_200_if_authorized_and_delete_actor(self):
-        actor = Actor.query.filter(Actor.name == self.new_actor['name']).order_by(
-            Actor.id.desc()).first()
+        actor = Actor.query.order_by(Actor.id.desc()).first()
 
         res = self.client().delete('/actors/{}'.format(actor.id),
                                    headers={"Authorization": 'Bearer ' + self.token_director})

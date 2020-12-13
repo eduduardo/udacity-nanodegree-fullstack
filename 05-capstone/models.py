@@ -1,6 +1,6 @@
-#----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
 # Models
-#----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
 from config import db
 
 # cast is the many-to-many relationship of actors and movies
@@ -79,7 +79,8 @@ class Movie(db.Model):
         }
 
     def __repr__(self):
-        return f'<Movie {self.id} | {self.title} | {self.release_date.strftime("%Y-%m-%d")}>'
+        return f'''<Movie {self.id} | {self.title} |
+                {self.release_date.strftime("%Y-%m-%d")}>'''
 
 
 class Actor(db.Model):
