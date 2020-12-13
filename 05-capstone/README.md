@@ -274,11 +274,11 @@ body:
 ```
 
 ### DELETE **`/movies/<int:movie_id>`**
-Endpoint to DELETE actor using a movie ID
+Endpoint to DELETE movie using a movie ID
 - Requires: `delete:movie`
 - Request Arguments:
 ```
-movie_id - actor ID to remove
+movie_id - movie ID to remove
 ex.: /movie/10
 ```
 - Returns: An object with the `deleted` movie ID if success, if not return error.
