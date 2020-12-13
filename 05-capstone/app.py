@@ -77,7 +77,7 @@ def create_app(test_config=None):
         actor = Actor(name=name, gender=gender)
         try:
             actor.insert()
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
 
@@ -116,7 +116,7 @@ def create_app(test_config=None):
 
         try:
             actor.update()
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
 
@@ -137,7 +137,7 @@ def create_app(test_config=None):
 
         try:
             actor.delete()
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
 
@@ -190,7 +190,7 @@ def create_app(test_config=None):
         movie = Movie(title=title, release_date=release_date)
         try:
             movie.insert()
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
 
@@ -237,7 +237,7 @@ def create_app(test_config=None):
 
         try:
             movie.update()
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
 
@@ -258,7 +258,7 @@ def create_app(test_config=None):
 
         try:
             movie.delete()
-        except:
+        except Exception:
             db.session.rollback()
             abort(422)
 
@@ -321,6 +321,7 @@ def create_app(test_config=None):
         }), error.status_code
 
     return app
+
 
 app = create_app()
 

@@ -1,7 +1,7 @@
-#----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
 # Auth with JWT
 # imported from previous my udacity projects
-#----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
 from os import environ
 import json
 from flask import request, _request_ctx_stack
@@ -10,7 +10,7 @@ from jose import jwt
 from urllib.request import urlopen
 
 AUTH0_DOMAIN = environ.get('AUTH0_DOMAIN', 'dev-ehvlmutg.us.auth0.com')
-ALGORITHMS = ['RS256']
+ALGORITHMS = environ.get('ALGORITHMS').split(',') # transform into array
 API_AUDIENCE = environ.get('AUTH0_AUDIENCE', 'agency')
 
 '''
@@ -31,9 +31,11 @@ class AuthError(Exception):
     it should attempt to split bearer and the token
         it should raise an AuthError if the header is malformed
     return the token part of the header
+    inspired by udacity example:
+        https://github.com/udacity/FSND/blob/master/BasicFlaskAuth/app.py
 '''
 
-# inspired by udacity example: https://github.com/udacity/FSND/blob/master/BasicFlaskAuth/app.py
+
 def get_token_auth_header():
     auth_header = request.headers.get('Authorization', None)
     if auth_header is None:
@@ -47,7 +49,7 @@ def get_token_auth_header():
     if parts[0].lower() != 'bearer':
         raise AuthError({
             'code': 'invalid_header',
-            'description': 'Authorization header must start with Bearer keyword',
+            'description': 'Authorization must start with Bearer keyword',
         }, 401)
 
     elif len(parts) == 1:
@@ -73,7 +75,8 @@ def get_token_auth_header():
 
     it should raise an AuthError if permissions are not included in the payload
         !!NOTE check your RBAC settings in Auth0
-    it should raise an AuthError if the requested permission string is not in the payload permissions array
+    it should raise an AuthError if the requested permission string is
+    not in the payload permissions array
     return true otherwise
 '''
 
@@ -97,8 +100,6 @@ def check_permissions(permission, payload):
     it should decode the payload from the token
     it should validate the claims
     return the decoded payload
-
-    !!NOTE urlopen has a common certificate error described here: https://stackoverflow.com/questions/50236117/scraping-ssl-certificate-verify-failed-error-for-http-en-wikipedia-org
 '''
 
 # cache this
@@ -106,6 +107,8 @@ jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
 jwks = json.loads(jsonurl.read())
 
 # code of https://github.com/udacity/FSND/blob/master/BasicFlaskAuth/app.py
+
+
 def verify_decode_jwt(token):
     unverified_header = jwt.get_unverified_header(token)
     rsa_key = {}
@@ -145,7 +148,7 @@ def verify_decode_jwt(token):
         except jwt.JWTClaimsError:
             raise AuthError({
                 'code': 'invalid_claims',
-                'description': 'Incorrect claims. Please, check the audience and issuer'
+                'description': 'Incorrect claims. Check the audience'
             }, 401)
         except Exception:
             raise AuthError({
@@ -164,8 +167,10 @@ def verify_decode_jwt(token):
 
     it should use the get_token_auth_header method to get the token
     it should use the verify_decode_jwt method to decode the jwt
-    it should use the check_permissions method validate claims and check the requested permission
-    return the decorator which passes the decoded payload to the decorated method
+    it should use the check_permissions method validate claims
+        and check the requested permission
+    return the decorator which passes the decoded payload
+        to the decorated method
 '''
 
 

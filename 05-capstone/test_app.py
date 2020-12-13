@@ -15,7 +15,9 @@ class CastingTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_path = environ.get('DATABASE_URL_TEST', 'postgresql://app_user@localhost:5432/casting_agency')
+        self.database_path = environ.get(
+            'DATABASE_URL_TEST',
+            'postgresql://app_user@localhost:5432/casting_agency')
 
         setup_db(self.app, self.database_path)
 
@@ -43,12 +45,13 @@ class CastingTestCase(unittest.TestCase):
         """Executed after reach test"""
         pass
 
-    #--------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     # Actors
-    #--------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     def test_400_if_authorized_and_create_actor_invalid(self):
         res = self.client().post('/actors', json={},
-                                 headers={"Authorization": 'Bearer ' + self.token_director})
+                                 headers={"Authorization": 'Bearer ' +
+                                          self.token_director})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -58,7 +61,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_401_if_unauthorized_and_create_actor(self):
         res = self.client().post('/actors', json=self.new_actor,
-                                 headers={"Authorization": 'Bearer ' + self.token_assistant})
+                                 headers={"Authorization": 'Bearer ' +
+                                          self.token_assistant})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -69,11 +73,12 @@ class CastingTestCase(unittest.TestCase):
 
     def test_200_if_authorized_and_create_actor(self):
         res = self.client().post('/actors', json=self.new_actor,
-                                 headers={"Authorization": 'Bearer ' + self.token_director})
+                                 headers={"Authorization": 'Bearer ' +
+                                          self.token_director})
         data = json.loads(res.data)
 
-        actor = Actor.query.filter(Actor.name == self.new_actor['name']).order_by(
-            Actor.id.desc()).first()
+        actor = Actor.query.filter(Actor.name == self.new_actor['name']) \
+                           .order_by(Actor.id.desc()).first()
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.content_type, 'application/json')
@@ -84,7 +89,8 @@ class CastingTestCase(unittest.TestCase):
         actor = Actor.query.order_by(Actor.id.desc()).first()
 
         res = self.client().patch('/actors/{}'.format(actor.id), json={},
-                                  headers={"Authorization": 'Bearer ' + self.token_director})
+                                  headers={"Authorization": 'Bearer ' +
+                                           self.token_director})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -94,7 +100,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_404_if_authorized_and_update_non_existing_actor(self):
         res = self.client().patch('/actors/999999999', json={},
-                                  headers={"Authorization": 'Bearer ' + self.token_director})
+                                  headers={"Authorization": 'Bearer ' +
+                                           self.token_director})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -104,7 +111,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_401_if_unauthorized_and_update_actor(self):
         res = self.client().patch('/actors/999999999', json={},
-                                  headers={"Authorization": 'Bearer ' + self.token_assistant})
+                                  headers={"Authorization": 'Bearer ' +
+                                           self.token_assistant})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -118,8 +126,10 @@ class CastingTestCase(unittest.TestCase):
 
         new_name = 'Morgan Freeman'
 
-        res = self.client().patch('/actors/{}'.format(actor.id), json={"name": new_name},
-                                  headers={"Authorization": 'Bearer ' + self.token_director})
+        res = self.client().patch('/actors/{}'.format(actor.id),
+                                  json={"name": new_name},
+                                  headers={"Authorization": 'Bearer ' +
+                                           self.token_director})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -138,7 +148,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_404_if_authorized_and_actors_invalid_pagitation(self):
         res = self.client().get('/actors?page=44444',
-                                headers={"Authorization": 'Bearer ' + self.token_assistant})
+                                headers={"Authorization": 'Bearer ' +
+                                         self.token_assistant})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -147,7 +158,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_200_if_authorized_and_get_all_actors(self):
         res = self.client().get(
-            '/actors', headers={"Authorization": 'Bearer ' + self.token_assistant})
+            '/actors', headers={"Authorization": 'Bearer ' +
+                                self.token_assistant})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -155,16 +167,17 @@ class CastingTestCase(unittest.TestCase):
         self.assertGreater(len(data['actors']), 0)
         self.assertGreater(data['total'], 0)
 
-    #--------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     # Movies
-    #--------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     def test_200_if_authorized_and_create_movie(self):
         res = self.client().post('/movies', json=self.new_movie,
-                                 headers={"Authorization": 'Bearer ' + self.token_producer})
+                                 headers={"Authorization": 'Bearer ' +
+                                          self.token_producer})
         data = json.loads(res.data)
 
-        movie = Movie.query.filter(Movie.title == self.new_movie['title']).order_by(
-            Movie.id.desc()).first()
+        movie = Movie.query.filter(Movie.title == self.new_movie['title']) \
+                           .order_by(Movie.id.desc()).first()
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(res.content_type, 'application/json')
@@ -173,7 +186,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_400_if_authorized_and_create_invalid_movie(self):
         res = self.client().post('/movies', json={},
-                                 headers={"Authorization": 'Bearer ' + self.token_producer})
+                                 headers={"Authorization": 'Bearer ' +
+                                          self.token_producer})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -184,7 +198,8 @@ class CastingTestCase(unittest.TestCase):
     def test_401_if_unauthorized_and_create_movie(self):
         res = self.client().post('/movies',
                                  json=self.new_movie,
-                                 headers={"Authorization": 'Bearer ' + self.token_director})
+                                 headers={"Authorization": 'Bearer ' +
+                                          self.token_director})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -201,7 +216,8 @@ class CastingTestCase(unittest.TestCase):
 
         res = self.client().patch('/movies/{}'.format(movie.id),
                                   json={"title": new_title},
-                                  headers={"Authorization": 'Bearer ' + self.token_producer})
+                                  headers={"Authorization": 'Bearer ' +
+                                           self.token_producer})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -213,7 +229,8 @@ class CastingTestCase(unittest.TestCase):
         movie = Movie.query.order_by(Movie.id.desc()).first()
 
         res = self.client().patch('/movies/{}'.format(movie.id), json={},
-                                  headers={"Authorization": 'Bearer ' + self.token_producer})
+                                  headers={"Authorization": 'Bearer ' +
+                                           self.token_producer})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -222,7 +239,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_404_if_authorized_and_update_non_existing_movie(self):
         res = self.client().patch('/movies/99999999999', json={},
-                                  headers={"Authorization": 'Bearer ' + self.token_producer})
+                                  headers={"Authorization": 'Bearer ' +
+                                           self.token_producer})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -231,7 +249,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_401_if_uauthorized_and_update_movie(self):
         res = self.client().patch('/movies/1', json={},
-                                  headers={"Authorization": 'Bearer ' + self.token_assistant})
+                                  headers={"Authorization": 'Bearer ' +
+                                           self.token_assistant})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -241,7 +260,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_404_if_movie_invalid_pagitation(self):
         res = self.client().get('/movies?page=44444',
-                                headers={"Authorization": 'Bearer ' + self.token_assistant})
+                                headers={"Authorization": 'Bearer ' +
+                                         self.token_assistant})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -258,7 +278,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_200_if_authorized_and_get_all_movies(self):
         res = self.client().get(
-            '/movies', headers={"Authorization": 'Bearer ' + self.token_assistant})
+            '/movies', headers={"Authorization": 'Bearer ' +
+                                self.token_assistant})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -266,13 +287,14 @@ class CastingTestCase(unittest.TestCase):
         self.assertGreater(len(data['movies']), 0)
         self.assertGreater(data['total'], 0)
 
-    #--------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     # Deletes test data at the end
-    #--------------------------------------------------------------------------#
+    # ----------------------------------------------------------------------- #
     # actor
     def test_404_if_authorized_and_delete_non_existing_actor(self):
         res = self.client().delete('/actors/999999999',
-                                   headers={"Authorization": 'Bearer ' + self.token_director})
+                                   headers={"Authorization": 'Bearer ' +
+                                            self.token_director})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -282,7 +304,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_401_if_unauthorized_and_delete_actor(self):
         res = self.client().delete(
-            '/actors/1', headers={"Authorization": 'Bearer ' + self.token_assistant})
+            '/actors/1', headers={"Authorization": 'Bearer ' +
+                                  self.token_assistant})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -294,8 +317,9 @@ class CastingTestCase(unittest.TestCase):
     def test_200_if_authorized_and_delete_actor(self):
         actor = Actor.query.order_by(Actor.id.desc()).first()
 
-        res = self.client().delete('/actors/{}'.format(actor.id),
-                                   headers={"Authorization": 'Bearer ' + self.token_director})
+        res = self.client().delete(
+            '/actors/{}'.format(actor.id),
+            headers={"Authorization": 'Bearer ' + self.token_director})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -305,8 +329,9 @@ class CastingTestCase(unittest.TestCase):
 
     # movies
     def test_404_if_authorized_and_delete_non_existing_movie(self):
-        res = self.client().delete('/movies/999999',
-                                   headers={"Authorization": 'Bearer ' + self.token_producer})
+        res = self.client().delete(
+            '/movies/999999',
+            headers={"Authorization": 'Bearer ' + self.token_producer})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -316,7 +341,8 @@ class CastingTestCase(unittest.TestCase):
 
     def test_401_if_unauthorized_and_delete_movie(self):
         res = self.client().delete(
-            '/movies/1', headers={"Authorization": 'Bearer ' + self.token_director})
+            '/movies/1',
+            headers={"Authorization": 'Bearer ' + self.token_director})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -329,7 +355,8 @@ class CastingTestCase(unittest.TestCase):
         movie = Movie.query.order_by(Movie.id.desc()).first()
 
         res = self.client().delete('/movies/{}'.format(movie.id),
-                                   headers={"Authorization": 'Bearer ' + self.token_producer})
+                                   headers={"Authorization": 'Bearer ' +
+                                            self.token_producer})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
