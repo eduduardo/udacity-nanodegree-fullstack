@@ -4,6 +4,47 @@ Final project for Udacity Full Stack Developer Nanodegree.
 # Motivation
 The Casting Agency is a company that is responsible for creating movies and managing and assigning actors to those movies. This project aims to are creating a system to simplify and streamline this process.
 
+# Live project
+The live version of this project is hosted on Heroku.
+https://edu-casting-agency.herokuapp.com/
+
+### Request Example
+```
+export DIRECTOR_TOKEN=[ADD_THE_TOKEN_OF_THE_NEXT_STEP]
+curl --request GET \
+  --url https://edu-casting-agency.herokuapp.com/movies \
+  -H "Authorization: Bearer ${DIRECTOR_TOKEN}"
+```
+```
+export ASSISTANT_TOKEN=[ADD_THE_TOKEN_OF_THE_NEXT_STEP]
+curl --request GET \
+  --url https://edu-casting-agency.herokuapp.com/actors \
+  -H "Authorization: Bearer ${ASSISTANT_TOKEN}"
+```
+
+### Authentication Steps
+There is a file named `tokens.txt` with the 3 users authorization tokens
+- Casting Assistant
+- Casting Director
+- Executive Producer
+
+If the token expires. Please enter on the following link https://dev-ehvlmutg.us.auth0.com/authorize?audience=agency&response_type=token&client_id=0PWzm0kkCTP0sd2T5GJN4lT5fr7Ol8tZ&redirect_uri=https://edu-casting-agency.herokuapp.com/
+
+And login with the credentials:
+```
+user: assistant@agency.com
+pass: agency123456*
+
+user: director@agency.com
+pass: agency123456*
+
+user: producer@agency.com
+pass: agency123456*
+```
+
+Grap the `#access_token=` on the redirected url
+
+
 # Dependencies
 
 #### Python 3.7
@@ -79,13 +120,6 @@ These are all the permissions (scopes) that this API uses.
 
 #### Endpoints
 These are all the endpoints this API dispose:
-
-### Request Example
-```
-curl --request GET \
-  --url https://edu-casting-agency.herokuapp.com/movies \
-  -H "Authorization: Bearer ${DIRECTOR_TOKEN}"
-```
 
 ### GET **`/actors`**
 This endpoint return a list of actors, their names, and movies participating, including pagination (every 5)
