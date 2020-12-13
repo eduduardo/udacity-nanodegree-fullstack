@@ -21,7 +21,7 @@ class CastingTestCase(unittest.TestCase):
         self.database_path = "postgresql://{}@{}/{}".format(
             self.database_user, self.database_host, self.database_name)
 
-        setup_db(self.app, self.database_path)
+        setup_db(self.app)
 
         self.new_actor = {
             "name": "Elijah Wood",

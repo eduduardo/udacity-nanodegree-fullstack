@@ -25,6 +25,14 @@ def create_app(test_config=None):
                              'GET,POST,PUT,DELETE,OPTIONS')
         return response
 
+    # index for check health
+    @app.route('/')
+    def index():
+        return jsonify({
+            "success": True,
+            "message": 'healthy'
+        })
+
     # ----------------------------------------------------------------------- #
     # Actors
     # ----------------------------------------------------------------------- #
@@ -314,8 +322,7 @@ def create_app(test_config=None):
 
     return app
 
-
-APP = create_app()
+app = create_app()
 
 if __name__ == '__main__':
-    APP.run(host='127.0.0.1', port=8080, debug=True)
+    app.run()
