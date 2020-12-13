@@ -6,6 +6,7 @@ from models import Actor, Movie, Cast
 from flask_cors import CORS
 from flask import Flask, request, abort, jsonify
 from auth import requires_auth, AuthError
+import sys
 
 ACTORS_PER_PAGE = 5
 MOVIES_PER_PAGE = 5
@@ -78,6 +79,7 @@ def create_app(test_config=None):
         try:
             actor.insert()
         except Exception:
+            print(sys.exc_info())
             db.session.rollback()
             abort(422)
 
@@ -117,6 +119,7 @@ def create_app(test_config=None):
         try:
             actor.update()
         except Exception:
+            print(sys.exc_info())
             db.session.rollback()
             abort(422)
 
@@ -138,6 +141,7 @@ def create_app(test_config=None):
         try:
             actor.delete()
         except Exception:
+            print(sys.exc_info())
             db.session.rollback()
             abort(422)
 
@@ -191,6 +195,7 @@ def create_app(test_config=None):
         try:
             movie.insert()
         except Exception:
+            print(sys.exc_info())
             db.session.rollback()
             abort(422)
 
@@ -238,6 +243,7 @@ def create_app(test_config=None):
         try:
             movie.update()
         except Exception:
+            print(sys.exc_info())
             db.session.rollback()
             abort(422)
 
@@ -259,6 +265,7 @@ def create_app(test_config=None):
         try:
             movie.delete()
         except Exception:
+            print(sys.exc_info())
             db.session.rollback()
             abort(422)
 

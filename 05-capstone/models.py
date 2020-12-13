@@ -3,10 +3,27 @@
 # --------------------------------------------------------------------------- #
 from config import db
 
+'''
+Extend the base Model class to add common methods
+'''
+class BaseModel(db.Model):
+    __abstract__ = True
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
 # cast is the many-to-many relationship of actors and movies
 
 
-class Cast(db.Model):
+class Cast(BaseModel):
     __tablename__ = 'cast'
     id = db.Column(db.Integer, primary_key=True)
     movie_id = db.Column(db.Integer, db.ForeignKey(
@@ -21,22 +38,11 @@ class Cast(db.Model):
         self.movie_id = movie_id
         self.actor_id = actor_id
 
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
     def __repr__(self):
         return f'<Cast {self.movie_id} | {self.actor_id}>'
 
 
-class Movie(db.Model):
+class Movie(BaseModel):
     __tablename__ = 'movies'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
@@ -47,17 +53,6 @@ class Movie(db.Model):
     def __init__(self, title, release_date):
         self.title = title
         self.release_date = release_date
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
 
     def long(self):
         actors = []

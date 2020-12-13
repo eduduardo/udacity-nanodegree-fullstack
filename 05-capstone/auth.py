@@ -10,7 +10,7 @@ from jose import jwt
 from urllib.request import urlopen
 
 AUTH0_DOMAIN = environ.get('AUTH0_DOMAIN', 'dev-ehvlmutg.us.auth0.com')
-ALGORITHMS = environ.get('ALGORITHMS').split(',') # transform into array
+ALGORITHMS = environ.get('ALGORITHMS', 'RS256').split(',') # transform into array
 API_AUDIENCE = environ.get('AUTH0_AUDIENCE', 'agency')
 
 '''

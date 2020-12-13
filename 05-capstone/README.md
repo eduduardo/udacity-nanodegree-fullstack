@@ -1,4 +1,5 @@
 # Casting Agency Project
+# Introduction
 Final project for Udacity Full Stack Developer Nanodegree.
 
 # Motivation
@@ -53,14 +54,28 @@ Follow instructions to install the latest version of python for your platform in
 
 #### Virtual Enviornment
 
-We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
+We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) or below
+
+**Initialize and activate a virtualenv using:**
+```
+python3 -m virtualenv env
+source env/bin/activate
+```
+>**Note** - In Windows, the `env` does not have a `bin` directory. Therefore, you'd use the analogous command shown below:
+```
+source env/Scripts/activate
+```
+>**Note 2** - if you don't have virtualenv, please install:
+```
+pip3 install virtualenv
+```
 
 #### PIP Dependencies
 
 Once you have your virtual environment setup and running, install dependencies by running:
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ## Database Setup
@@ -75,12 +90,25 @@ First ensure you are working using your created virtual environment.
 
 To run the server, execute:
 
+1. Linux:
 ```bash
 export FLASK_APP=app
 export FLASK_ENV=development
 export DATABASE_URL=postgresql://app_user@localhost:5432/casting_agency
 export AUTH0_DOMAIN=dev-ehvlmutg.us.auth0.com
+export ALGORITHMS=RS256
 export AUTH0_AUDIENCE=agency
+flask run
+```
+
+2. Windows:
+```bash
+set FLASK_APP=app
+set FLASK_ENV=development
+set DATABASE_URL=postgresql://app_user@localhost:5432/casting_agency
+set AUTH0_DOMAIN=dev-ehvlmutg.us.auth0.com
+set ALGORITHMS=RS256
+set AUTH0_AUDIENCE=agency
 flask run
 ```
 
